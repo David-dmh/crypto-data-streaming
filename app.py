@@ -1,18 +1,24 @@
-from flask import Flask
-from flask import jsonify
-
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET'])
-def base_url():
-    """Base url to test API."""
+@app.route('/Home', methods=['GET'])
+def home_url():
+    """"""
+    return render_template("Home.html")
+  
 
-    response = {
-        'response': 'Hello world!'
-    }
+@app.route('/Listings', methods=['GET'])
+def listings_url():
+    """"""
 
-    return jsonify(response)
+
+
+@app.route('/AnalyticsSuite', methods=['GET'])
+def analyticssuite_url():
+    """"""
+
+
 
 
 if __name__ == '__main__':
