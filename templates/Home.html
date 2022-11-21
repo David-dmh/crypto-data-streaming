@@ -1,8 +1,7 @@
-<h1>Home</h1>
-<br>
-<button>Listings page</button>
-<a href="{{url_for(app.Listings)}}" >Login</a>
-<br>
-<br>
-<button>Analytics Suite</button>
-<br>
+<!doctype html>
+<html>
+<body>
+    <p><a href="{{ url_for('Listings') }}">Visit Listings</a></p>
+    <p><a href="{{ url_for('AnalyticsSuite') }}">Visit Analytics Suite</a></p>
+</body>
+</html>
