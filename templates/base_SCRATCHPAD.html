@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <address>Property App - Flask</address>
+        <title>Todo App - Flask</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
         <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     </head>
@@ -13,8 +13,8 @@
 
             <form class="ui form" action="/add" method="post">
                 <div class="field">
-                    <label>Property Address</label>
-                    <input type="text" name="address" placeholder="Enter ToDo task...">
+                    <label>Todo Title</label>
+                    <input type="text" name="title" placeholder="Enter ToDo task...">
                     <br>
                 </div>
                 <button class="ui blue button" type="submit">Add</button>
@@ -22,18 +22,18 @@
 
             <hr>
 
-            {% for house in house_list %} 
+            {% for todo in todo_list %} 
             <div class="ui segment">
-                <p class="ui big header">{{ house.id }} | {{ house.address }}</p>
+                <p class="ui big header">{{ todo.id }} | {{ todo.title }}</p>
 
-                {% if house.passes == False %}
+                {% if todo.complete == False %}
                 <span class="ui gray label">Not Complete</span>
                 {% else %}
                 <span class="ui green label">Complete</span>
                 {% endif %}
 
-                <a class="ui blue button" href="/update/{{ house.id }}">Update</a>
-                <a class="ui red button" href="/delete/{{ house.id }}">Delete</a>
+                <a class="ui blue button" href="/update/{{ todo.id }}">Update</a>
+                <a class="ui red button" href="/delete/{{ todo.id }}">Delete</a>
 
             </div>
             {% endfor %}
