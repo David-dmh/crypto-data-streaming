@@ -1,7 +1,15 @@
-<!doctype html>
+<!-- <!doctype html>
 <html>
 <body>
     <form method="post">
         <button type="submit">Home</button>
     </form>
+    <p><a href="/Logout"> <button>Logout</button> </a></p>
+</html> -->
+
+<!doctype html>
+<html>
+<body>
+    <p><a href="{{ url_for('Home') }}">Home</a></p>
+    <p><a href="/Logout"> <button>Logout</button> </a></p>
 </html>

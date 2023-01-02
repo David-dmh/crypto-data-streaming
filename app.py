@@ -1,34 +1,85 @@
-from flask import Flask, request, url_for, redirect, render_template
+from flask import Flask, request, url_for, redirect, render_template, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 app = Flask(__name__)
-
+app.secret_key = "testsecret"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-# db.create_all()
+# google-login 
+def login_is_required(function):
+    def wrapper(*args, **kwargs):
+        if "google_id" not in session:
+            return abort(401) # authorisation required
+        else:
+            return function()
+    return wrapper
 
-@app.route("/Home")
+
+@app.route("/Index")
+def Index():
+    return render_template("Index.html")
+
+
+@app.route("/Login")
+def Login():
+    session["google_id"] = "Test"
+    return redirect("/Home")
+
+
+@app.route("/Callback")
+def Callback():
+    pass
+
+
+@app.route("/Logout")
+def Logout():
+    session.clear()
+    return render_template("Index.html")
+
+
+@app.route("/Home", methods=["GET", "POST"])
+@login_is_required
 def Home():
     return render_template("Home.html")
 
-@app.route("/Listings", methods=["GET", "POST"])
-def Listings():
-    if request.method == "POST":
-        return redirect(url_for("Home"))
 
+@app.route("/Listings", methods=["GET", "POST"])
+# @login_is_required
+def Listings():
     return render_template("Listings.html")
 
-@app.route("/AnalyticsSuite", methods=["GET", "POST"])
-def AnalyticsSuite():
-    if request.method == "POST":
-        return redirect(url_for("Home"))
 
+@app.route("/AnalyticsSuite", methods=["GET", "POST"])
+# @login_is_required
+def AnalyticsSuite():
     return render_template("AnalyticsSuite.html")
+
+
+# @app.route("/Listings", methods=["GET", "POST"])
+# # @login_is_required
+# def Listings():
+#     if request.method == "POST":
+#         return redirect(url_for("Home"))
+
+#     return render_template("Listings.html")
+
+
+# @app.route("/AnalyticsSuite", methods=["GET", "POST"])
+# # @login_is_required
+# def AnalyticsSuite():
+#     if request.method == "POST":
+#         return redirect(url_for("Home"))
+
+#     return render_template("AnalyticsSuite.html")
+
+# @app.route("/protected_area")
+# @login_is_required
+# def protected_area():
+#     print("protected_area")
 
 #######################################################################
 # test area
