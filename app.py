@@ -38,7 +38,8 @@ def Callback():
 @app.route("/Logout")
 def Logout():
     session.clear()
-    return render_template("Index.html")
+    return redirect("/Index")
+    # return render_template("Index.html")
 
 
 @app.route("/Home", methods=["GET", "POST"])
