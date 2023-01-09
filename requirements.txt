@@ -1,5 +1,9 @@
 Flask
 Flask-SQLAlchemy
 Flask-Migrate
-
-google_auth_oauthlib
+Flask-Login 
+Flask-Bcrypt 
+Flask-WTF 
+Flask-Testing
+google_auth_oauthlib 
+python-decouple
