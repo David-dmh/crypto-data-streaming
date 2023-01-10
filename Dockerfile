@@ -11,7 +11,15 @@ RUN pip3 --no-cache-dir install -r requirements.txt
 
 EXPOSE 5000
 
-CMD ["python3", "src/__init__.py"]
+# RUN cd src 
+# CMD ["python3", "__init__.py"]
+RUN cd src && python3 __init__.py
+
+# RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+# RUN source .env
+
+# CMD ["python3", "__init__.py"]
+
 # CMD ["python3", "app.py"]
 
 # RUN ".env"
