@@ -9,17 +9,16 @@ COPY . /app
 
 RUN pip3 --no-cache-dir install -r requirements.txt
 
+ENV SECRET_KEY=fdkjshfhjsdfdskfdsfdcbsjdkfdsdf
+ENV DEBUG=True
+ENV APP_SETTINGS=config.DevelopmentConfig
+ENV DATABASE_URL=sqlite:///db.sqlite
+ENV SQLALCHEMY_TRACK_MODIFICATIONS=False
+ENV FLASK_APP=src
+ENV FLASK_DEBUG=1
+
 EXPOSE 5000
 
-# RUN cd src 
-# CMD ["python3", "__init__.py"]
 RUN cd src && python3 __init__.py
+RUN cd .. && python3 manage.py
 
-# RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-# RUN source .env
-
-# CMD ["python3", "__init__.py"]
-
-# CMD ["python3", "app.py"]
-
-# RUN ".env"

@@ -4,8 +4,6 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 from decouple import config
-from src.accounts.views import accounts_bp
-from src.core.views import core_bp
 
 app = Flask(__name__)
 app.config.from_object(config("APP_SETTINGS"))
@@ -20,8 +18,9 @@ migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
 # register blueprints
-app.register_blueprint(core_bp)
+# from src.core.views import core_bp
 
+# app.register_blueprint(core_bp)
 
 # class HouseModel(db.Model):
 #     __tablename__ = "houses"
