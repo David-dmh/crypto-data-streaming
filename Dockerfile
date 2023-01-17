@@ -19,6 +19,6 @@ ENV FLASK_DEBUG=1
 
 EXPOSE 5000
 
-RUN cd src && python3 __init__.py
-RUN cd .. && python3 manage.py
+RUN cd src && python3.10 __init__.py
+RUN cd .. && python3.10 manage.py
 
