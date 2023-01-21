@@ -1,24 +1,7 @@
-FROM ubuntu:22.04
-
-RUN apt-get update -y
-RUN apt-get install -y python3-pip
-
+FROM python:3.9.10-alpine3.14
 WORKDIR /app
-
+RUN pip install --upgrade pip
+RUN pip install flask
 COPY . /app
-
-RUN pip3 --no-cache-dir install -r requirements.txt
-
-ENV SECRET_KEY=fdkjshfhjsdfdskfdsfdcbsjdkfdsdf
-ENV DEBUG=True
-ENV APP_SETTINGS=config.DevelopmentConfig
-ENV DATABASE_URL=sqlite:///db.sqlite
-ENV SQLALCHEMY_TRACK_MODIFICATIONS=False
-ENV FLASK_APP=src
-ENV FLASK_DEBUG=1
-
-EXPOSE 5000
-
-RUN cd src && python3.10 __init__.py
-RUN cd .. && python3.10 manage.py
-
+ENV FLASK_APP=app
+CMD ["python","app.py"]
