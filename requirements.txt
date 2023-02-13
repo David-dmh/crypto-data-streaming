@@ -1,7 +1,4 @@
-flask
-flask-login
-flask_sqlalchemy
-flask_bcrypt
-flask_wtf
-wtforms
-email_validator
+Flask
+Flask-Migrate
+Flask-SQLAlchemy
+psycopg2-binary
