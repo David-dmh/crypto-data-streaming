@@ -1,3 +1,4 @@
 CREATE TABLE IF NOT EXISTS test_seeding (
     id SERIAL PRIMARY KEY
-);
+)
+;
