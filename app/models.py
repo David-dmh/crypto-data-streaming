@@ -4,8 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 # would allow to manipulate out of date models
 # after a transaction has been committed
 # ! be aware that the above can have unintended side effects
-db = SQLAlchemy()
 
+db = SQLAlchemy()
 
 class TodosList(db.Model):
     __tablename__ = "todos_lists"
@@ -14,14 +14,13 @@ class TodosList(db.Model):
         db.Integer,
         primary_key=True,
         autoincrement=True,
-        unique=True
-    )
+        unique=True)
+
     name = db.Column(db.String(), nullable=False)
     todos = db.relationship(
         "Todo",
         backref="list",
-        cascade="all, delete-orphan"
-    )
+        cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<TodosList {self.id}, {self.name}>"
