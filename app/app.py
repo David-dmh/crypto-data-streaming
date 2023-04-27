@@ -1,3 +1,4 @@
+from requests import session
 from flask import abort, jsonify, redirect, render_template, request, url_for
 from flask_migrate import Migrate
 import sys
@@ -6,206 +7,63 @@ from init import create_app
 from models import db, TodosList, Todo
 
 app = create_app()
+
 # bootstrap database migrate commands
 db.init_app(app)
 migrate = Migrate(app, db)
 
 
-# @app.route is a decorator that takes an input function index()
-# as the callback that gets invoked
-# when a request to route / comes in from a client
-@app.route('/')
-def index():
-    return redirect(url_for("get_todos_from_list", list_id=1))
+# # google-login 
+# def login_is_required(function):
+#     def wrapper(*args, **kwargs):
+#         if "google_id" not in session:
+#             return abort(401)
+#         else:
+#             return function()
+#     return wrapper
+
+# routes
+@app.route("/Home", methods=["GET", "POST"])
+# @login_is_required
+def Home():
+    return render_template("Home.html")
 
 
-# JSON
-@app.route("/lists", methods=["POST"])
-def create_list():
-    responseBody = {}
-    error = False
-    try:
-        name = request.get_json()["name"]
-        list = TodosList(name=name)
-        responseBody["msg"] = "todos list has been created"
-        db.session.add(list)
-        db.session.commit()
-        responseBody["id"] = list.id
-        responseBody['name'] = list.name
-    except Exception as e:
-        error = True
-        db.session.rollback()
-        print(sys.exc_info())
-    finally:
-        db.session.close()
-        if error:
-            abort(400)
-        else:
-            return jsonify(responseBody)
+@app.route("/Listings", methods=["GET", "POST"])
+# @login_is_required
+def Listings():
+    return render_template("Listings.html")
 
 
-# web
-@app.route("/lists/<list_id>")
-def get_todos_from_list(list_id):
-    activeList = TodosList.query.get(list_id)
-    activeListTodos = Todo.query.filter_by(list_id=list_id).order_by(
-        Todo.id
-    ).all()
-    listsData = []
-    lists = TodosList.query.order_by(TodosList.id).all()
-    for list in lists:
-        todos = list.todos
-        listCompleted = len(todos) > 0
-        for todo in todos:
-            if not todo.completed:
-                listCompleted = False
-                break
-        listsData.append({
-            "data": list,
-            "completed": listCompleted
-        })
-    return render_template(
-        "index.html",
-        activeList=activeList,
-        activeListId=list_id,
-        activeListTodos=activeListTodos,
-        lists=listsData
-    )
+@app.route("/AnalyticsSuite", methods=["GET", "POST"])
+# @login_is_required
+def AnalyticsSuite():
+    return render_template("AnalyticsSuite.html")
 
 
-# JSON
-@app.route("/lists/<list_id>/todos")
-def get_todos_from_list_json(list_id):
-    activeListTodos = Todo.query.filter_by(list_id=list_id).order_by(
-        Todo.id
-    ).all()
-    responseBody = {}
-    responseBody["msg"] = "fetched all todos for list " + list_id
-    responseBody["data"] = []
-    for todo in activeListTodos:
-        responseBody["data"].append({
-            "id": todo.id,
-            "completed": todo.completed
-        })
-    return jsonify(responseBody)
+# # login-related routes
+# @app.route("/Index")
+# def Index():
+#     return render_template("Index.html")
 
 
-# JSON
-@app.route("/todos", methods=["POST"])
-def create_todo():
-    responseBody = {}
-    error = False
-    try:
-        description = request.get_json()["description"]
-        list_id = request.get_json()["list_id"]
-        todo = Todo(description=description)
-        list = TodosList.query.get(list_id)
-        todo.list = list
-        responseBody["msg"] = "todo has been created"
-        db.session.add(todo)
-        db.session.commit()
-        responseBody["id"] = todo.id
-        responseBody['description'] = todo.description
-    except Exception as e:
-        error = True
-        db.session.rollback()
-        print(sys.exc_info())
-    finally:
-        db.session.close()
-        if error:
-            abort(400)
-        else:
-            return jsonify(responseBody)
+# @app.route("/Login")
+# def Login():
+#     session["google_id"] = "Test"
+#     return redirect("/Home")
 
 
-# JSON
-@app.route("/lists/<int:id>", methods=["DELETE"])
-def delete_list(id):
-    responseBody = {}
-    error = False
-    try:
-        Todo.query.filter_by(list_id=id).delete()
-        TodosList.query.filter_by(id=id).delete()
-        db.session.commit()
-        responseBody['msg'] = "todos list has been deleted !"
-    except Exception as e:
-        error = True
-        db.session.rollback()
-        print(sys.exc_info())
-    finally:
-        db.session.close()
-        if error:
-            abort(400)
-        else:
-            return jsonify(responseBody)
+# # @app.route("/Callback")
+# # def Callback():
+# #     pass
 
 
-# JSON
-@app.route("/todos/<int:id>", methods=["DELETE"])
-def delete_todo(id):
-    responseBody = {}
-    error = False
-    try:
-        Todo.query.filter_by(id=id).delete()
-        db.session.commit()
-        responseBody['msg'] = "todo has been deleted !"
-    except Exception as e:
-        error = True
-        db.session.rollback()
-        print(sys.exc_info())
-    finally:
-        db.session.close()
-        if error:
-            abort(400)
-        else:
-            return jsonify(responseBody)
+# @app.route("/Logout")
+# def Logout():
+#     session.clear()
+#     return redirect("/Index")
+#     # return render_template("Index.html")
 
-
-# JSON
-@app.route('/lists/<int:list_id>/complete', methods=['PUT'])
-def update_list(list_id):
-    responseBody = {}
-    error = False
-    try:
-        completed = request.get_json()['completed']
-        todos = Todo.query.filter_by(list_id=list_id).order_by(Todo.id).all()
-        for todo in todos:
-            todo.completed = completed
-        db.session.commit()
-        responseBody['msg'] = "list " + str(list_id) + " completed updated"
-    except Exception as e:
-        error = True
-        db.session.rollback()
-        print(sys.exc_info())
-    finally:
-        db.session.close()
-        if error:
-            abort(400)
-        else:
-            return jsonify(responseBody)
-
-
-# JSON
-@app.route('/todos/<int:id>', methods=['PUT'])
-def update_todo(id):
-    responseBody = {}
-    error = False
-    try:
-        completed = request.get_json()['completed']
-        todo = Todo.query.get(id)
-        todo.completed = completed
-        db.session.commit()
-        responseBody['msg'] = "todo " + str(todo.id) + " completed updated"
-    except Exception as e:
-        error = True
-        db.session.rollback()
-        print(sys.exc_info())
-    finally:
-        db.session.close()
-        if error:
-            abort(400)
-        else:
-            return jsonify(responseBody)
 
 
 # if running this module as a standalone program
