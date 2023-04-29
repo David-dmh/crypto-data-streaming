@@ -27,7 +27,7 @@ db = SQLAlchemy()
 #         return f"<CryptoList {self.id}, {self.name}>"
 
 
-class CryptoModel1(db.Model):
+class CryptoModel(db.Model):
     __tablename__ = "crypto"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -42,6 +42,15 @@ class CryptoModel1(db.Model):
     # )
 
     def __repr__(self):
-        return f"<CryptoModel1 {self.id}, {self.completed}, {self.description}>"
+        return f"<CryptoModel {self.id}, {self.completed}, {self.description}>"
     
+class MasterDataModel(db.Model):
+    __tablename__ = "master_data"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    lookup_col = db.Column(db.Boolean, nullable=False, default=False)
+
+    def __repr__(self):
+        return f"<MasterDataModel {self.id}, {self.completed}, {self.description}>"
     
+        
