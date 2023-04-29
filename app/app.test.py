@@ -32,10 +32,10 @@ class AppTest(unittest.TestCase):
         """Reset logic:
            - reset DB after each test is run
         """
-        engine = create_engine("postgresql://usr:pwd@pgsql-test:5433/todos")
+        engine = create_engine("postgresql://usr:pwd@pgsql-test:5433/crypto")
         connection = engine.raw_connection()
         cursor = connection.cursor()
-        command = "DROP TABLE todos, todos_lists;"
+        command = "DROP TABLE crypto, crypto_lists;"
         cursor.execute(command)
         connection.commit()
         cursor.close()
@@ -55,7 +55,7 @@ class AppTest(unittest.TestCase):
            then the response should have a status code of 200"""
         res = self.client().get('/api')
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(res.json["msg"], "todos api is up")
+        self.assertEqual(res.json["msg"], "crypto api is up")
         self.assertEqual(res.json["data"], None)
         self.assertTrue(res.json["success"])
 

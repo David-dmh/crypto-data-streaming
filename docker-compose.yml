@@ -1,6 +1,6 @@
 volumes:
-  todos-vol:
-  todos-test-vol:
+  crypto-vol:
+  crypto-test-vol:
 
 services:
 
@@ -10,9 +10,9 @@ services:
     environment:
       POSTGRES_PASSWORD: pwd
       POSTGRES_USER: usr
-      POSTGRES_DB: todos
+      POSTGRES_DB: crypto
     volumes:
-      - todos-vol:/var/lib/postgresql/data
+      - crypto-vol:/var/lib/postgresql/data
     ports:
       - 5432:5432
 
@@ -24,9 +24,9 @@ services:
     environment:
       POSTGRES_PASSWORD: pwd 
       POSTGRES_USER: usr
-      POSTGRES_DB: todos
+      POSTGRES_DB: crypto
     volumes:
-      - todos-test-vol:/var/lib/postgresql/data
+      - crypto-test-vol:/var/lib/postgresql/data
     ports:
       - 5433:5433
 

@@ -7,8 +7,9 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-class TodosList(db.Model):
-    __tablename__ = "todos_lists"
+
+class CryptoList(db.Model):
+    __tablename__ = "crypto_lists"
 
     id = db.Column(
         db.Integer,
@@ -17,17 +18,17 @@ class TodosList(db.Model):
         unique=True)
 
     name = db.Column(db.String(), nullable=False)
-    todos = db.relationship(
-        "Todo",
+    crypto = db.relationship(
+        "Crypto",
         backref="list",
         cascade="all, delete-orphan")
 
     def __repr__(self):
-        return f"<TodosList {self.id}, {self.name}>"
+        return f"<CryptoList {self.id}, {self.name}>"
 
 
-class Todo(db.Model):
-    __tablename__ = "todos"
+class Crypto(db.Model):
+    __tablename__ = "crypto"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     completed = db.Column(db.Boolean, nullable=False, default=False)
@@ -35,9 +36,9 @@ class Todo(db.Model):
     due_date = db.Column(db.DateTime, nullable=True)
     list_id = db.Column(
         db.Integer,
-        db.ForeignKey("todos_lists.id"),
+        db.ForeignKey("crypto_lists.id"),
         nullable=False
     )
 
     def __repr__(self):
-        return f"<Todo {self.id}, {self.completed}, {self.description}>"
+        return f"<Crypto {self.id}, {self.completed}, {self.description}>"
