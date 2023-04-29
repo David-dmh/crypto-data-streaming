@@ -8,37 +8,40 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
-class CryptoList(db.Model):
-    __tablename__ = "crypto_lists"
+# class CryptoList(db.Model):
+#     __tablename__ = "crypto_lists"
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True,
-        autoincrement=True,
-        unique=True)
+#     id = db.Column(
+#         db.Integer,
+#         primary_key=True,
+#         autoincrement=True,
+#         unique=True)
 
-    name = db.Column(db.String(), nullable=False)
-    crypto = db.relationship(
-        "Crypto",
-        backref="list",
-        cascade="all, delete-orphan")
+#     name = db.Column(db.String(), nullable=False)
+#     # crypto = db.relationship(
+#     #     "Crypto",
+#     #     backref="list",
+#     #     cascade="all, delete-orphan")
 
-    def __repr__(self):
-        return f"<CryptoList {self.id}, {self.name}>"
+#     def __repr__(self):
+#         return f"<CryptoList {self.id}, {self.name}>"
 
 
-class Crypto(db.Model):
+class CryptoModel1(db.Model):
     __tablename__ = "crypto"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    completed = db.Column(db.Boolean, nullable=False, default=False)
+    is_btc = db.Column(db.Boolean, nullable=False, default=False)
     description = db.Column(db.String(), nullable=False)
-    due_date = db.Column(db.DateTime, nullable=True)
-    list_id = db.Column(
-        db.Integer,
-        db.ForeignKey("crypto_lists.id"),
-        nullable=False
-    )
+    my_date = db.Column(db.DateTime, nullable=True)
+
+    # list_id = db.Column(
+    #     db.Integer,
+    #     db.ForeignKey("crypto_lists.id"),
+    #     nullable=False
+    # )
 
     def __repr__(self):
-        return f"<Crypto {self.id}, {self.completed}, {self.description}>"
+        return f"<CryptoModel1 {self.id}, {self.completed}, {self.description}>"
+    
+    

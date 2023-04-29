@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 import sys
 
 from init import create_app
-from models import db, CryptoList, Crypto
+from models import db, CryptoModel1
 
 app = create_app()
 
