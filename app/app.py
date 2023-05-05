@@ -2,6 +2,7 @@ from requests import session
 from flask import abort, jsonify, redirect, render_template, request, url_for
 from flask_migrate import Migrate
 import sys
+import cryptocompare
 
 from init import create_app
 from models import db, CryptoModel, MasterDataModel
@@ -63,6 +64,7 @@ def AnalyticsSuite():
 #     session.clear()
 #     return redirect("/Index")
 #     # return render_template("Index.html")
+
 
 
 
