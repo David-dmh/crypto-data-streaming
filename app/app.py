@@ -24,7 +24,7 @@ migrate = Migrate(app, db)
 #     return wrapper
 
 # routes
-@app.route("/Index", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 # @login_is_required
 def Index():
     return render_template("Index.html")
