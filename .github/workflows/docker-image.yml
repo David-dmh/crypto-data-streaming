@@ -1,5 +1,3 @@
-name: Docker image CI
-
 on:
   push:
     branches: [ "main" ]
