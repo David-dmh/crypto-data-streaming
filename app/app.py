@@ -2,7 +2,7 @@ import sys
 from requests import session
 from flask import abort, jsonify, redirect, render_template, request, url_for
 from flask_migrate import Migrate
-import cryptocompare 
+import cryptocompare
 
 from init import create_app
 from models import db, CryptoModel, MasterDataModel
