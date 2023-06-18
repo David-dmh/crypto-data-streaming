@@ -1,5 +1,5 @@
 name:
-  docker-image-build-test
+  docker-image-build
 on:
   push:
     branches: [ "main" ]
