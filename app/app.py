@@ -5,7 +5,7 @@ from flask_migrate import Migrate
 import cryptocompare
 
 from init import create_app
-from models import db, CryptoModel, MasterDataModel
+from models import db, DimCoinModel, FactPriceModel
 
 app = create_app()
 

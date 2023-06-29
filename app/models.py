@@ -7,50 +7,39 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+class FactPriceModel(db.Model):
+    __tablename__ = "fact_price"
 
-# class CryptoList(db.Model):
-#     __tablename__ = "crypto_lists"
-
-#     id = db.Column(
-#         db.Integer,
-#         primary_key=True,
-#         autoincrement=True,
-#         unique=True)
-
-#     name = db.Column(db.String(), nullable=False)
-#     # crypto = db.relationship(
-#     #     "Crypto",
-#     #     backref="list",
-#     #     cascade="all, delete-orphan")
-
-#     def __repr__(self):
-#         return f"<CryptoList {self.id}, {self.name}>"
-
-
-class CryptoModel(db.Model):
-    __tablename__ = "crypto"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    is_btc = db.Column(db.Boolean, nullable=False, default=False)
-    description = db.Column(db.String(), nullable=False)
-    my_date = db.Column(db.DateTime, nullable=True)
-
-    # list_id = db.Column(
-    #     db.Integer,
-    #     db.ForeignKey("crypto_lists.id"),
-    #     nullable=False
-    # )
+    id = db.Column(db.BIGINT, primary_key=True, autoincrement=True)
+    date = db.Column(db.TIMESTAMP, nullable=False, default=False)
+    coin_id = db.Column(db.BIGINT, nullable=False)
+    price = db.Column(db.DECIMAL(precision=5, scale=5), nullable=True)
+    checksum = db.Column(db.VARCHAR(512), nullable=True)
 
     def __repr__(self):
-        return f"<CryptoModel {self.id}, {self.completed}, {self.description}>"
+        return f"""
+        <FactPriceModel
+        {self.id}, 
+        {self.date}, 
+        {self.coin_id}>
+        {self.price}>
+        {self.checksum}>
+        """
     
-class MasterDataModel(db.Model):
-    __tablename__ = "master_data"
+class DimCoinModel(db.Model):
+    __tablename__ = "dim_coin"
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    lookup_col = db.Column(db.Boolean, nullable=False, default=False)
+    id = db.Column(db.BIGINT, primary_key=True, autoincrement=True)
+    coin_symbol = db.Column(db.VARCHAR(64), nullable=False, default=False)
+    coin_name = db.Column(db.VARCHAR(512), nullable=False, default=False)
+    checksum = db.Column(db.VARCHAR(512), nullable=False, default=False)
+
 
     def __repr__(self):
-        return f"<MasterDataModel {self.id}, {self.completed}, {self.description}>"
-    
-        
+        return f"""
+        <DimCoinModel
+        {self.id}, 
+        {self.coin_symbol}, 
+        {self.coin_name}, 
+        {self.checksum}>
+        """
