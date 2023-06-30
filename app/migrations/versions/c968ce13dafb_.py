@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: c0cf8af96514
-Revises: 21c587284906
-Create Date: 2023-06-29 19:04:01.140849
+Revision ID: c968ce13dafb
+Revises: 9c303e481bd0
+Create Date: 2023-06-30 20:21:36.864187
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'c0cf8af96514'
-down_revision = '21c587284906'
+revision = 'c968ce13dafb'
+down_revision = '9c303e481bd0'
 branch_labels = None
 depends_on = None
 
@@ -29,11 +29,10 @@ def upgrade():
     sa.Column('id', sa.BIGINT(), autoincrement=True, nullable=False),
     sa.Column('date', sa.TIMESTAMP(), nullable=False),
     sa.Column('coin_id', sa.BIGINT(), nullable=False),
-    sa.Column('price', sa.DOUBLE(), nullable=True),
+    sa.Column('price', sa.DECIMAL(precision=5, scale=5), nullable=True),
     sa.Column('checksum', sa.VARCHAR(length=512), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.drop_table('master_data')
     op.drop_table('crypto')
     # ### end Alembic commands ###
 
@@ -46,11 +45,6 @@ def downgrade():
     sa.Column('description', sa.VARCHAR(), autoincrement=False, nullable=False),
     sa.Column('my_date', postgresql.TIMESTAMP(), autoincrement=False, nullable=True),
     sa.PrimaryKeyConstraint('id', name='crypto_pkey')
-    )
-    op.create_table('master_data',
-    sa.Column('id', sa.INTEGER(), autoincrement=True, nullable=False),
-    sa.Column('lookup_col', sa.BOOLEAN(), autoincrement=False, nullable=False),
-    sa.PrimaryKeyConstraint('id', name='master_data_pkey')
     )
     op.drop_table('fact_price')
     op.drop_table('dim_coin')
