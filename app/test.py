@@ -1,4 +1,5 @@
 import unittest
+from flask_sqlalchemy import SQLAlchemy
 from init import create_app
 from models import db
 
