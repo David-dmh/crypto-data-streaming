@@ -39,7 +39,7 @@ class AppTest(unittest.TestCase):
         engine = SQLAlchemy.create_engine("postgresql://usr:pwd@pgsql-test:5433/crypto")
         connection = engine.raw_connection()
         cursor = connection.cursor()
-        command = "DROP TABLE crypto, crypto_lists;"
+        command = "DROP TABLE fact_price, dim_coin;"
         cursor.execute(command)
         connection.commit()
         cursor.close()
