@@ -71,9 +71,6 @@ def AnalyticsSuite():
 #     return redirect("/Index")
 #     # return render_template("Index.html")
 
-
-
-
 # if running this module as a standalone program
 # (cf. command in the Python Dockerfile)
 if __name__ == "__main__":
