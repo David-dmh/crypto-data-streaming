@@ -4,6 +4,7 @@ from flask import \
     abort, jsonify, redirect, render_template, request, url_for
 from flask_migrate import Migrate
 import cryptocompare
+import psycopg2
 
 from init import create_app
 from models import db, DimCoinModel, FactPriceModel
@@ -13,7 +14,6 @@ app = create_app()
 # bootstrap database migrate commands
 db.init_app(app)
 migrate = Migrate(app, db)
-
 
 # # google-login 
 # def login_is_required(function):
@@ -37,10 +37,26 @@ def Home():
     return render_template("Home.html")
 
 
-@app.route("/Listings", methods=["GET", "POST"])
+@app.route("/Prices", methods=["GET", "POST"])
 # @login_is_required
-def Listings():
-    return render_template("Listings.html")
+def Prices():
+
+    try: 
+        conn = psycopg2.connect(
+            database="crypto", 
+            user="usr",  
+            password="pwd", 
+            host="localhost",
+        )
+
+    except:
+        raise Exception()
+    
+    mycursor = conn.cursor()
+    mycursor.execute("SELECT * FROM public.fact_price")
+    data = mycursor.fetchall()
+
+    return render_template("Prices.html", data=data)
 
 
 @app.route("/AnalyticsSuite", methods=["GET", "POST"])
