@@ -47,6 +47,7 @@ def Prices():
             user="usr",  
             password="pwd", 
             host="localhost",
+            port=5432
         )
 
     except:
