@@ -1,6 +1,5 @@
 from flask import jsonify
 
-
 # routes factory
 def init_routes(app):
 

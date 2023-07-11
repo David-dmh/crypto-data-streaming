@@ -5,7 +5,6 @@ from flask import \
 from flask_migrate import Migrate
 import cryptocompare
 import psycopg2
-
 from init import create_app
 from models import db, DimCoinModel, FactPriceModel
 
