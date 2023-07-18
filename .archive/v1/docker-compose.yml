@@ -8,9 +8,11 @@ services:
     image: postgres:12.11
     restart: always
     environment:
+      POSTGRES_HOST: localhost # added as a test
       POSTGRES_PASSWORD: pwd
       POSTGRES_USER: usr
       POSTGRES_DB: crypto
+      POSTGRES_PORT: 5432 # added as a test
     volumes:
       - crypto-vol:/var/lib/postgresql/data
     ports:
