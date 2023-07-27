@@ -1,5 +1,5 @@
 Crypto data streaming test project using crypto compare API.
 
 Notes:
-- docker-compose build --no-cache (docker compose build --no-cache)
-- docker-compose up
+- docker compose build --no-cache)
+- docker compose up
