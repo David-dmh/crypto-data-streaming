@@ -14,8 +14,8 @@ try:
 except ModuleNotFoundError:
     from app.src import db_connection
     from app.src import endpoint
-
-
+8
+ 
 def bootstrap():
     """
         Sets up the database with a clean consistent state. 
