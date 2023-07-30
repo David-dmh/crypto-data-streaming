@@ -1,47 +1,36 @@
 """
-This module contains the code to run the bootstrap procedure for the endpoint
- and database.
-
+- module to run bootstrap procedure for endpoint and database
 """
 
-#standard imports
 import glob
 
-#local application imports -``
-try:
-    import db_connection
-    import endpoint
-except ModuleNotFoundError:
-    from app.src import db_connection
-    from app.src import endpoint
-8
+import db_connection
+import endpoint
+
  
 def bootstrap():
     """
-        Sets up the database with a clean consistent state. 
-        It creates the tables, clears any existing data and restores data from 
-        backup csvs.
-
-        Args: None
-           
-        Returns: None
+    Setup database with clean, consistent state. 
+    Create tables, clear existing data, restore data from backup csvs.
+    Args: None
+    Returns: None
     """
-    print("Beginning bootstrap procedure...")  #for debugging
-    db = db_connection.DBConnection()  #pylint: disable=C0103
-    print("Established connection to db...")  #for debugging
+    print("Bootstrap start...") 
+    db = db_connection.DBConnection()
+    print("Established connection to db...")
 
     db.create_tables()
-    print("Created database tables")  #for debugging
+    print("Created database tables")
 
-    #clear any lingering data and start afresh
+    # clear existing data (refresh)
     db.clear_data()
 
-    # iterate through backup csv folder and add them to database
-    for csv_file in glob.glob('/usr/backups/*.csv'):
+    # iterate through backup csv folder and add backup csvs to db
+    for csv_file in glob.glob("/usr/backups/*.csv"):
         db.insert_backup_data(csv_file)
-    print("Bootstrap procedure complete")  #for debugging
+    print("Bootstrap end...") 
 
-
-if __name__ == '__main__':  #set up database and endpoint
+# set up db and endpoint
+if __name__ == "__main__":  
     bootstrap()
     endpoint.run()
