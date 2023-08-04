@@ -213,11 +213,11 @@ class DBConnection:
         Inserts database backup CSV data. 
         If a unique uid for each measurement is not present, it generates one 
         and stores it in the CSV file.
-        The rows in the CSV are then inserted as records in the respective 
+        The rows in the CSV are then inserted as records in respective 
         tables.
 
         Args: 
-            - csv_file: the path of the CSV file
+            - csv_file: path of the CSV file
            
         Returns: None (since commits data to database)
         """
@@ -226,24 +226,24 @@ class DBConnection:
             data["uuid"] = [uuid.uuid4().hex for _ in range(data.shape[0])]
             data.to_csv(csv_file)
 
-    # CSV for each table converted to a string and copied across to database.
-    # Alternative could be to do Batch Insert
+    # csv for each table converted to a string and copied across to database.
+    # alternative could be to do Batch Insert
         for table in Database.get_columns():
             table_df = data[Database.get_columns()[table]]
             output = io.StringIO()
-            table_df.to_csv(output, sep='\t', header=False, index=False)
+            table_df.to_csv(output, sep="\t", header=False, index=False)
             output.seek(0)
             self._cur.copy_from(output, table, null="")
         self._conn.commit()
 
     def insert_sensor_data(self, data):
         """
-        Inserts the air pollution sensor data into database
+        Inserts air pollution sensor data into database.
 
         Args: 
-            data: a list of data values from the hardware. 
-            This is logically grouped into groups of 4 values. 
-            Each group is a measurement of (lat, long, PM10, PM2.5).
+            - data: list of data values from the hardware (logically grouped 
+            into groups of 4 values, each group is a measurement of 
+            (lat, long, PM10, PM2.5)
            
         Returns: None (since commits data to database)
 
@@ -256,83 +256,117 @@ class DBConnection:
 
         for i in range(0, len(data), 4):
             self._cur.execute(
-                "INSERT INTO air_quality (uuid, Latitude, Longitude, PM10,\
-                 PM2_5) VALUES (%s, %s, %s, %s, %s)",
-                (uuid.uuid4().hex, *list(data)[i:i + 4]))
+                """
+                INSERT INTO air_quality 
+                (uuid, Latitude, Longitude, PM10, PM2_5) 
+                 VALUES (%s, %s, %s, %s, %s)
+                 """,
+                (uuid.uuid4().hex, *list(data)[i: i + 4]))
+        
         self._conn.commit()
 
     def query_air_pollution_data(self):
         """
-        Returns the air pollution sensor data from the database.
-        This is used for analytics.
+        Returns air pollution sensor data from database for analytics.
 
         Args: None
            
-        Returns: List of (lists of 4 values) - this corresponds to records of 
-        (Lat, Long, PM10, PM2.5).
+        Returns: list of (lists of 4 values) - corresponds to records of 
+        (Lat, Long, PM10, PM2.5)
         """
         self._cur.execute(
-            "SELECT Latitude, Longitude, PM10, PM2_5 FROM air_quality;")
+            """
+            SELECT Latitude, Longitude, PM10, PM2_5 FROM air_quality;
+            """
+        )
+
         return json.dumps(self._cur.fetchall())
 
     def get_connection_stats(self):
         """
-       Returns the statistics for the database connection (useful for 
-       debugging). 
+       Returns statistics for database connection (for debugging). 
 
         Args: None
            
-        Returns: A JSON string consisting of connection statistics. 
+        Returns: JSON string consisting of connection statistics 
         e.g. 
-        {"user": "tester", "dbname": "testdatabase",
-         "host": "database", "port": "5432", 
-         "tty": "", "options": "", "sslmode": "prefer", 
-         "sslcompression": "0", "krbsrvname": "postgres",
-         "target_session_attrs": "any"}
-         """
+        {4
+            "user": "tester", 4
+            "dbname": "testdatabase",
+            "host": "database", 
+            "port": "5432", 
+            "tty": "", 
+            "options": "", 
+            "sslmode": "prefer", 
+            "sslcompression": "0", 
+            "krbsrvname": "postgres",
+            "target_session_attrs": "any"
+        }
+        """
+
         return json.dumps(self._conn.get_dsn_parameters())
 
     def get_database_info(self):
         """
-        Returns the data stored in the database, indexed by table.
+        Returns data stored in database, indexed by table.
 
         Args: None
            
-        Returns: A JSON string where keys are table names and values are lists 
-        of lists.
-        This corresponds to the list of records in that table.
+        Returns: JSON string where keys are table names and values are lists 
+        of lists, corresponds to list of records in that table.
         """
         tables = {}
+        # returns iterable collection of public tables in the database
         self._cur.execute(
-            "SELECT table_name FROM information_schema.tables \
-       WHERE table_schema = 'public'"
-        )  # returns an iterable collection of public tables in the database
+            """
+            SELECT table_name 
+            FROM information_schema.tables
+            WHERE table_schema = 'public'
+            """
+        )  
+        
         for table in self._cur.fetchall():
             cur2 = self._conn.cursor()
+            # note sql module used for safe dynamic SQL queries
             cur2.execute(
-                sql.SQL("SELECT * FROM {} ;").format(sql.Identifier(table[0]))
-            )  # note sql module used for safe dynamic SQL queries
+                sql.SQL(
+                    """
+                    SELECT * FROM {} ;
+                    """
+                ).format(sql.Identifier(table[0]))
+            )  
+            
             tables[table[0]] = cur2.fetchall()
+
         return json.dumps(tables)
 
     def clear_data(self):
         """
-        Clears the data stored in the database.
-
-        This is useful for bootstrap and unit tests that want to start with a 
-        fresh state.
+        Clears data stored in database, useful for bootstrap and unit tests 
+        that want to start with a fresh state.
 
         Args: None
            
         Returns: None
         """
+
+        # returns an iterable collection of public tables in database
         self._cur.execute(
-            "SELECT table_name FROM information_schema.tables WHERE \
-            table_schema = 'public'"
-        )  # returns an iterable collection of public tables in the database
+            """
+            SELECT table_name FROM information_schema.tables WHERE \
+            table_schema = 'public'
+            """
+        )  
+
         for table in self._cur.fetchall():
             cur2 = self._conn.cursor()
+            # note sql module used for safe dynamic SQL queries
             cur2.execute(
-                sql.SQL("DELETE FROM {} ;").format(sql.Identifier(table[0]))
-            )  # note sql module used for safe dynamic SQL queries
+                sql.SQL(
+                    """
+                    DELETE 
+                    FROM {} ;
+                    """
+                ).format(sql.Identifier(table[0]))
+            )  
         self._conn.commit()
