@@ -3,11 +3,8 @@
 - provides clean REST API to query and modify the database
 """
 
-#third party imports
 from flask import Flask, request
 from flask_cors import CORS
-
-#local application imports
 
 try:
     import db_connection

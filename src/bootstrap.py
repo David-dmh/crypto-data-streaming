@@ -3,7 +3,6 @@
 """
 
 import glob
-
 import db_connection
 import endpoint
 
