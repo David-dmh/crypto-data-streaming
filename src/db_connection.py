@@ -238,7 +238,7 @@ class DBConnection:
 
     def insert_sensor_data(self, data):
         """
-        Inserts air pollution sensor data into database.
+        Inserts prices data into database.
 
         Args: 
             - data: list of data values from the hardware (logically grouped 
@@ -265,9 +265,9 @@ class DBConnection:
         
         self._conn.commit()
 
-    def query_air_pollution_data(self):
+    def query_prices_data(self):
         """
-        Returns air pollution sensor data from database for analytics.
+        Returns prices sensor data from database for analytics.
 
         Args: None
            
