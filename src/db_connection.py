@@ -184,7 +184,7 @@ class DBConnection:
         Args: 
             - data: list of data values from the hardware (logically grouped 
             into groups of 4 values, each group is a measurement of 
-            (lat, long, PM10, PM2.5)
+            (timestamp, price_in_usd, checksum)
            
         Returns: None (since commits data to database)
 

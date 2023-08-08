@@ -58,15 +58,14 @@ def connection_stats():
 
 
 @app.route("/AnalyticsSuite", methods=["GET"])
-def query_prices_data():
+def query_fact_prices_data():
     """
     Returns the prices data
     Args: None
         
     Returns: 
         - Response 200 and JSON string - list of records 
-        (Lat, Long, PM10, PM2.5).
-        See DBConnection class for more info
+        (timestamp, price_in_usd, checksum) - see DBConnection class
         - Response 504 if database connection not possible
     """
 
@@ -77,7 +76,7 @@ def query_prices_data():
             "ContentType": "text/plain"
         }
     
-    return db.query_prices_data(), 200, {
+    return db.query_fact_prices_data(), 200, {
         "ContentType": "application/json"
     }
 
