@@ -28,89 +28,30 @@ class Database:
         
     """
     _columns = {
-        "position": [
-            "uuid", "AccX", "AccY", "AccZ", "Acc_mag", "Altitude", "GyroX",
-            "GyroY", "GyroZ", "Gyro_mag", "Latitude", "Longitude", "Speed"
+        "fact_prices": [
+            "timestamp", "price_in_usd", "checksum"
         ],
-        "weather": [
-            "uuid", "DewPt", "Humid", "MxWSpd", "Press", "Rain", "Sun",
-            "Temp_CBS", "Temp_CL", "WindDr", "WindSp"
-        ],
-        "time": [
-            "uuid", "Date", "Counter", "Millis", "Start", "Time"
-        ],
-        "system_status": [
-            "uuid", "BatteryVIN", "Satellites", "gpsUpdated", "nAcc"
-        ],
-        "air_quality": [
-            "uuid", "Latitude", "Longitude", "PM10", "PM2.5"
+        "dim_coins": [
+            "id", "abbr", "name", "checksum"
         ]
     }
 
     _schemas = {
-        "position":
+        "fact_prices":
         """
         (
-            uuid TEXT PRIMARY KEY, 
-            AccX FLOAT8, 
-            AccY FLOAT8 , 
-            AccZ FLOAT8,
-            Acc_mag FLOAT8, 
-            Altitude FLOAT8, 
-            GyroX FLOAT8, 
-            GyroY FLOAT8, 
-            GyroZ FLOAT8, 
-            Gyro_mag FLOAT8, 
-            Latitude FLOAT8, 
-            Longitude FLOAT8, 
-            Speed FLOAT8
+            timestamp FLOAT8, 
+            price_in_usd FLOAT8,
+            checksum TEXT
         )
         """,
-        "weather":
+        "dim_coins":
         """
         (
-            uuid TEXT PRIMARY KEY, 
-            DewPt FLOAT8, 
-            Humid FLOAT8, 
-            MxWSpd FLOAT8,
-            Press FLOAT8, 
-            Rain FLOAT8, 
-            Sun FLOAT8, 
-            Temp_CBS FLOAT8,
-            Temp_CL FLOAT8, 
-            WindDr FLOAT8, 
-            WindSp FLOAT8
-        )
-        """,
-        "time":
-        """
-        (
-            uuid TEXT PRIMARY KEY, 
-            Date FLOAT8, 
-            Counter FLOAT8, 
-            Millis FLOAT8, 
-            Start TEXT, 
-            Time FLOAT8
-        )
-        """,
-        "system_status":
-        """ 
-        (
-            uuid TEXT PRIMARY KEY, 
-            BatteryVIN FLOAT8, 
-            Satellites FLOAT8,
-            gpsUpdated FLOAT8, 
-            nAcc FLOAT8
-        )
-        """,
-        "air_quality":
-        """
-        (
-            uuid TEXT PRIMARY KEY, 
-            Latitude FLOAT8, 
-            Longitude FLOAT8,
-            PM10 FLOAT8, 
-            PM2_5 FLOAT8
+            id TEXT PRIMARY KEY, 
+            abbr TEXT, 
+            name TEXT, 
+            checksum TEXT
         )
         """
     }
@@ -236,7 +177,7 @@ class DBConnection:
             self._cur.copy_from(output, table, null="")
         self._conn.commit()
 
-    def insert_sensor_data(self, data):
+    def insert_fact_prices_data(self, data):
         """
         Inserts prices data into database.
 
@@ -257,26 +198,48 @@ class DBConnection:
         for i in range(0, len(data), 4):
             self._cur.execute(
                 """
-                INSERT INTO air_quality 
-                (uuid, Latitude, Longitude, PM10, PM2_5) 
-                 VALUES (%s, %s, %s, %s, %s)
+                INSERT INTO fact_prices 
+                (
+                    timestamp, 
+                    price_in_usd, 
+                    checksum
+                ) 
+                VALUES 
+                (
+                    %s, 
+                    %s, 
+                    %s, 
+                    %s, 
+                    %s
+                )
+                ;
                  """,
-                (uuid.uuid4().hex, *list(data)[i: i + 4]))
+                (
+                    uuid.uuid4().hex, 
+                    *list(data)[i: i + 4]
+                )
+            )
         
         self._conn.commit()
 
-    def query_prices_data(self):
+    def query_fact_prices_data(self):
         """
-        Returns prices sensor data from database for analytics.
+        Returns prices data from database for analytics.
 
         Args: None
            
-        Returns: list of (lists of 4 values) - corresponds to records of 
-        (Lat, Long, PM10, PM2.5)'
+        Returns: list of (lists of 3 values) - corresponds to records of 
+        (timestamp, price_in_usd, checksum)'
         """
         self._cur.execute(
             """
-            SELECT Latitude, Longitude, PM10, PM2_5 FROM air_quality;
+            SELECT 
+            timestamp, 
+            price_in_usd, 
+            checksum 
+            FROM 
+            fact_prices
+            ;
             """
         )
 
@@ -284,7 +247,7 @@ class DBConnection:
 
     def get_connection_stats(self):
         """
-       Returns statistics for database connection (for debugging). 
+       Returns statistics for database connection (debugging). 
 
         Args: None
            

@@ -6,7 +6,7 @@ import glob
 import db_connection
 import endpoint
 
- 
+
 def bootstrap():
     """
     Setup database with clean, consistent state. 
