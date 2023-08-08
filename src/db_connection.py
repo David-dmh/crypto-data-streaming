@@ -272,7 +272,7 @@ class DBConnection:
         Args: None
            
         Returns: list of (lists of 4 values) - corresponds to records of 
-        (Lat, Long, PM10, PM2.5)
+        (Lat, Long, PM10, PM2.5)'
         """
         self._cur.execute(
             """
