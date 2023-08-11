@@ -208,8 +208,6 @@ class DBConnection:
                 (
                     %s, 
                     %s, 
-                    %s, 
-                    %s, 
                     %s
                 )
                 ;
@@ -316,8 +314,10 @@ class DBConnection:
         # returns an iterable collection of public tables in database
         self._cur.execute(
             """
-            SELECT table_name FROM information_schema.tables WHERE \
-            table_schema = 'public'
+            SELECT 
+            table_name 
+            FROM information_schema.tables 
+            WHERE table_schema = 'public'
             """
         )  
 

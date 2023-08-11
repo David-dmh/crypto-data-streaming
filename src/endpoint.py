@@ -1,5 +1,5 @@
 """
-- module containin implementation of endpoint
+- module contain in implementation of endpoint
 - provides clean REST API to query and modify the database
 """
 
@@ -40,7 +40,7 @@ def connection_stats():
     Returns connection stats for database connection (debugging).
 
     Args: None
-        
+    
     Returns: 
         - Response 200 and JSON string of connection stats - see 
         DBConnection class for more info 
