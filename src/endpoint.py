@@ -1,9 +1,4 @@
-"""
-- module contain in implementation of endpoint
-- provides clean REST API to query and modify the database
-"""
-
-from flask import Flask, request
+from flask import Flask, request, render_template
 from flask_cors import CORS
 
 import db_connection
@@ -12,10 +7,14 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route("/", methods=["GET"])
+@app.route("/")
+def index():
+    return render_template("Index.html")
+
+@app.route("/Data", methods=["GET"])
 def database_info():
     """
-    Returns all data stored in the database.
+    Returns all data stored in the database under public schema.
 
     Args: None
         
@@ -32,53 +31,50 @@ def database_info():
             "ContentType": "text/plain"
         }
     return db.get_database_info(), 200, {"ContentType": "application/json"}
-
-
-@app.route("/Info", methods=["GET"])
-def connection_stats():
-    """
-    Returns connection stats for database connection (debugging).
-
-    Args: None
-    
-    Returns: 
-        - Response 200 and JSON string of connection stats - see 
-        DBConnection class for more info 
-        - Response 504 if database connection not possible
-    """
-
-    try:
-        db = db_connection.DBConnection()
-    except IOError:
-        return "Database connection not possible", 504, {
-            "ContentType": "text/plain"
-        }
-    
-    return db.get_connection_stats(), 200, {"ContentType": "application/json"}
-
-
-@app.route("/AnalyticsSuite", methods=["GET"])
-def query_fact_prices_data():
-    """
-    Returns the prices data
-    Args: None
+# def query_fact_prices_data():
+#     """
+#     Returns the prices data
+#     Args: None
         
-    Returns: 
-        - Response 200 and JSON string - list of records 
-        (timestamp, price_in_usd, checksum) - see DBConnection class
-        - Response 504 if database connection not possible
-    """
+#     Returns: 
+#         - Response 200 and JSON string - list of records 
+#         (timestamp, price_in_usd, checksum) - see DBConnection class
+#         - Response 504 if database connection not possible
+#     """
 
-    try:
-        db = db_connection.DBConnection()
-    except IOError:
-        return "Database connection not possible", 504, {
-            "ContentType": "text/plain"
-        }
+#     try:
+#         db = db_connection.DBConnection()
+#     except IOError:
+#         return "Database connection not possible", 504, {
+#             "ContentType": "text/plain"
+#         }
     
-    return db.query_fact_prices_data(), 200, {
-        "ContentType": "application/json"
-    }
+#     return db.query_fact_prices_data(), 200, {
+#         "ContentType": "application/json"
+#     }
+
+
+# @app.route("/Info", methods=["GET"])
+# def connection_stats():
+#     """
+#     Returns connection stats for database connection (debugging).
+
+#     Args: None
+    
+#     Returns: 
+#         - Response 200 and JSON string of connection stats - see 
+#         DBConnection class for more info 
+#         - Response 504 if database connection not possible
+#     """
+
+#     try:
+#         db = db_connection.DBConnection()
+#     except IOError:
+#         return "Database connection not possible", 504, {
+#             "ContentType": "text/plain"
+#         }
+    
+#     return db.get_connection_stats(), 200, {"ContentType": "application/json"}
 
 
 # @app.route("/insertSensorData", methods=["POST"])
