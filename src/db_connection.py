@@ -1,9 +1,3 @@
-"""
-- module containing database information
-- database class to define database schema
-- DBConnection class provides clean interface to perform database operations
-"""
-
 import json
 import os
 import uuid

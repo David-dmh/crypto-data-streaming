@@ -1,7 +1,3 @@
-"""
-- module to run bootstrap procedure for endpoint and database
-"""
-
 import glob
 import db_connection
 import endpoint
@@ -27,6 +23,7 @@ def bootstrap():
     # iterate through backup csv folder and add backup csvs to db
     for csv_file in glob.glob("/usr/backups/*.csv"):
         db.insert_backup_data(csv_file)
+
     print("Bootstrap end...") 
 
 # set up db and endpoint
