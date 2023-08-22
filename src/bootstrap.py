@@ -26,7 +26,22 @@ def bootstrap():
 
     print("Bootstrap end...") 
 
+def flink():
+    """
+    ?
+    Args: None
+    Returns: None
+    """
+    print("Flink start...") 
+
+    t_sql_source = """
+    
+    """
+
+    print("Flink end...") 
+
 # set up db and endpoint
 if __name__ == "__main__":  
     bootstrap()
+    flink()
     endpoint.run()
