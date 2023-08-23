@@ -1,6 +1,7 @@
 import glob
 import db_connection
 import endpoint
+from pyflink.table import table_environment
 
 
 def bootstrap():
@@ -35,8 +36,14 @@ def flink():
     print("Flink start...") 
 
     t_sql_source = """
-    
+    CREATE TABLE flink_fact_prices (
+        timestamp DOUBLE
+        ,price_in_usd DOUBLE
+        ,checksum TEXT
+    )
     """
+
+    # pg_flink_fact_prices = table_environment.execute_sql(t_sql_source)
 
     print("Flink end...") 
 
