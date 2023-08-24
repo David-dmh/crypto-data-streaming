@@ -43,7 +43,7 @@ def flink():
     )
     """
 
-    # pg_flink_fact_prices = table_environment.execute_sql(t_sql_source)
+    pg_flink_fact_prices = table_environment.execute_sql(t_sql_source)
 
     print("Flink end...") 
 
