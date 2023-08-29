@@ -1,7 +1,8 @@
 import glob
 import db_connection
 import endpoint
-from pyflink.table import table_environment
+from pyflink.table.types import DataType
+from pyflink.table import TableSink
 
 
 def bootstrap():
@@ -43,7 +44,16 @@ def flink():
     )
     """
 
-    pg_flink_fact_prices = table_environment.execute_sql(t_sql_source)
+    # pg_flink_fact_prices = table_environment.execute_sql(t_sql_source)
+
+    # my_sink = TableSink(
+    #     field_names=["timestamp", "price_in_usd", "checksum"], 
+    #     field_types=[DataType.String(), DataType.Float(), DataType.String()], 
+    #     path, 
+    #     field_delimiter=',', 
+    #     num_files=-1,
+    #     write_mode=None
+    # )
 
     print("Flink end...") 
 
