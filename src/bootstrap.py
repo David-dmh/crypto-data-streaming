@@ -69,10 +69,10 @@ def flink():
 
     # dim data - exchanges
     myexchangedict = cryptocompare.get_exchanges()
-    print(json.dumps(myexchangedict, indent=4))
+    # print(json.dumps(myexchangedict, indent=4))
 
     # # dim data - coins
-    # mycoindict = cryptocompare.get_coin_list(format=False)
+    mycoindict = cryptocompare.get_coin_list(format=False)
     # print(json.dumps(mycoindict, indent=4))
 
     # sample fact data
